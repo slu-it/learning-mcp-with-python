@@ -1,0 +1,8 @@
+POST http://localhost:8000/api/messaging/send
+Content-Type: application/json
+
+{
+  "channel": "WHATSAPP",
+  "phoneNumber": "+49 123 123456",
+  "message": "Hello World!"
+}
