@@ -8,9 +8,11 @@ Interactive API docs are then available at http://127.0.0.1:8000/docs
 
 import contextlib
 import logging
+
 from fastapi import FastAPI
-from app.routers import health, messaging
+
 from app.mcp import mcp
+from app.routers import health, messaging
 
 logging.basicConfig(level=logging.INFO)
 
@@ -33,7 +35,7 @@ app = FastAPI(title="Test Service", version="0.1.0", lifespan=lifespan)
 
 app.include_router(health.router)
 app.include_router(messaging.router)
-app.mount("/mcp", _mcp_app)
+app.mount("/", _mcp_app)
 
 
 if __name__ == "__main__":
