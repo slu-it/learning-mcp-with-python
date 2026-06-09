@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Set up Python"
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+      - name: "Set up UV"
+        uses: astral-sh/setup-uv@v5
+      - name: "Install Dependencies"
+        run: uv sync --all-groups
+      - name: "Lint"
+        run: uv run ruff check .
+      - name: "Format"
+        run: uv run ruff format --check .
+      - name: "Type Check"
+        run: uv run mypy .
+      - name: "Test"
+        run: uv run pytest
+      - name: "Check: STDIO MCP server can start successfully"
+        run: bash .github/scripts/check-server-starts.sh app.mcp_stdio "" stdio
+      - name: "Check: HTTP MCP server can start successfully"
+        run: bash .github/scripts/check-server-starts.sh app.mcp_http "Uvicorn running on"
+      - name: "Check: server can start successfully"
+        run: bash .github/scripts/check-server-starts.sh app.main "Uvicorn running on"

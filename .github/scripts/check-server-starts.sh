@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Usage: check-server-starts.sh <python-module> <startup-log-pattern> [stdio|http]
+# If <startup-log-pattern> is empty, verifies the process stays alive for ~1s instead.
+MODULE="$1"
+PATTERN="$2"
+MODE="${3:-http}"
+
+LOG=$(mktemp)
+
+if [ "$MODE" = "stdio" ]; then
+  # Keep stdin open — closing it (e.g. </dev/null) causes the STDIO MCP server to exit immediately.
+  # Capture stderr only; stdout carries MCP protocol messages and must not be mixed in.
+  uv run python -m "$MODULE" 2>"$LOG" < <(sleep infinity) &
+else
+  uv run python -m "$MODULE" </dev/null >"$LOG" 2>&1 &
+fi
+
+PID=$!
+for i in $(seq 1 50); do
+  sleep 0.2
+  if ! kill -0 $PID 2>/dev/null; then
+    echo "$MODULE exited unexpectedly:"
+    cat "$LOG"
+    exit 1
+  fi
+  if [ -z "$PATTERN" ] && [ "$i" -ge 5 ]; then
+    echo "$MODULE started OK (process alive)"
+    kill $PID
+    exit 0
+  fi
+  if [ -n "$PATTERN" ] && grep -q "$PATTERN" "$LOG"; then
+    echo "$MODULE started OK"
+    kill $PID
+    exit 0
+  fi
+done
+echo "$MODULE did not start within 10s:"
+cat "$LOG"
+kill $PID 2>/dev/null
+exit 1
