@@ -473,6 +473,8 @@ source = { virtual = "." }
 dependencies = [
     { name = "fastapi", extra = ["standard"] },
     { name = "mcp", extra = ["cli"] },
+    { name = "pydantic-settings" },
+    { name = "pyjwt", extra = ["crypto"] },
 ]
 
 [package.dev-dependencies]
@@ -487,6 +489,8 @@ dev = [
 requires-dist = [
     { name = "fastapi", extras = ["standard"], specifier = ">=0.136.3" },
     { name = "mcp", extras = ["cli"], specifier = ">=1.27.2" },
+    { name = "pydantic-settings", specifier = ">=2.7.0" },
+    { name = "pyjwt", extras = ["crypto"], specifier = ">=2.10.0" },
 ]
 
 [package.metadata.requires-dev]

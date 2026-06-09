@@ -1,9 +1,15 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
+
+from app.auth import require_api_scope
 from app.schemas.messaging import SendMessageRequest
 from app.services import messaging as messaging_service
 from app.services.messaging import MessagingError
 
-router = APIRouter(prefix="/api/messaging", tags=["messaging"])
+router = APIRouter(
+    prefix="/api/messaging",
+    tags=["messaging"],
+    dependencies=[Depends(require_api_scope)],
+)
 
 
 @router.post(

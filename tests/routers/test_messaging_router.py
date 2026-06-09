@@ -4,6 +4,7 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
+from app.auth import require_api_scope
 from app.routers.messaging import router
 from app.schemas.messaging import Channel
 from app.services.messaging import MessagingError
@@ -20,6 +21,10 @@ VALID_BODY = {
 def client():
     app = FastAPI()
     app.include_router(router)
+    # These tests exercise routing/validation, not auth: bypass the bearer-token
+    # check so a missing Authorization header doesn't 401 before we get there.
+    # Auth enforcement itself is covered in tests/test_auth.py.
+    app.dependency_overrides[require_api_scope] = lambda: None
     return TestClient(app)
 
 
