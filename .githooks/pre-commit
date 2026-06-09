@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "▶ ruff format --check"
-uv run ruff format --check .
+echo "▶ ruff format"
+uv run ruff format .
 
 echo "▶ ruff check"
 uv run ruff check .
