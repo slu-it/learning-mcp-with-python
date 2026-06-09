@@ -1,5 +1,3 @@
-# learning-mcp-with-python
-
 # Learning: MCP with Python
 
 This repository contains code I've written to implement an MCP server using Python.
