@@ -59,11 +59,7 @@ claude mcp add learning-mcp-with-python-stdio -- uv --directory /home/user/proje
 ### HTTP
 
 ```
-# when using the full service (main.py)
 claude mcp add --transport http learning-mcp-with-python-http http://localhost:8000/mcp
-
-# when using just the MCP server (mcp_http.py)
-claude mcp add --transport http learning-mcp-with-python-http http://localhost:8000/
 ```
 
 When starting Claude afterward, the MCP server will be in the "needs authentication" state (check with the`/mcp` command).
