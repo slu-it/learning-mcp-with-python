@@ -17,27 +17,24 @@ class Settings(BaseSettings):
     mcp_required_scope: str = "mcp:tools"
 
     # Scope a bearer token must carry to reach the REST API (`/api/**`).
-    api_required_scope: str = "test-service-api"
+    api_required_scope: str = "api:access"
 
     # Keycloak (OAuth 2.0 authorization server) location.
     auth_host: str = "localhost"
-    auth_port: int = 8080
+    auth_port: int = 9000
     auth_realm: str = "master"
+
+    audience: str = "learning-mcp-with-python"
 
     @property
     def issuer_url(self) -> str:
-        """Token issuer (`iss`), e.g. ``http://localhost:8080/realms/master``."""
+        """Token issuer (`iss`), e.g. ``http://localhost:9000/realms/master``."""
         return f"http://{self.auth_host}:{self.auth_port}/realms/{self.auth_realm}"
 
     @property
     def jwks_uri(self) -> str:
         """JWKS endpoint used to fetch the realm's token-signing keys."""
         return f"{self.issuer_url}/protocol/openid-connect/certs"
-
-    @property
-    def audience(self) -> str:
-        """Expected token audience, normalised without a trailing slash."""
-        return str(self.mcp_server_url).rstrip("/")
 
 
 @lru_cache

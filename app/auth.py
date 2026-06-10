@@ -86,9 +86,7 @@ class RequireScope:
                 detail="Missing bearer token",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        access = await self._verifier.verify_token(
-            credentials.credentials
-        )  # TODO check if this is correct
+        access = await self._verifier.verify_token(credentials.credentials)
         if access is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

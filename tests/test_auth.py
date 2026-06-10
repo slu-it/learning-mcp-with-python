@@ -166,5 +166,5 @@ class TestEndpointSecurity:
         response = client.get("/.well-known/oauth-protected-resource")
         assert response.status_code == 200
         body = response.json()
-        assert body["authorization_servers"] == ["http://localhost:8080/realms/master"]
+        assert body["authorization_servers"] == ["http://localhost:9000/realms/master"]
         assert "mcp:tools" in body["scopes_supported"]
